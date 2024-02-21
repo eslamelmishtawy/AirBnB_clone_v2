@@ -128,6 +128,10 @@ class HBNBCommand(cmd.Cmd):
             param_split = args[i].split("=")
             param_split[1] = param_split[1].replace("_", " ")
             param_split[1] = param_split[1].replace("\"", "")
+            try:
+                param_split[1] = eval(param_split[1])
+            except:
+                pass
             setattr(new_instance, param_split[0], param_split[1])
         storage.save()
         print(new_instance.id)
