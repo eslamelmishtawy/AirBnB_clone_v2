@@ -13,7 +13,7 @@ class FileStorage:
         if cls == None:
             return FileStorage.__objects
         cls_objs_dict = {}
-        for k, v in self.__objects.item():
+        for k, v in self.__objects.items():
             if cls == v.__class__ or cls == v.__class__.__name__:
                 cls_objs_dict[k] = v
         return cls_objs_dict
