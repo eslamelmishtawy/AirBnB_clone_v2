@@ -3,7 +3,8 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import models
 
-class User(BaseModel, Base):
+
+class User(BaseModel):
 
     """This class defines a user by various attributes"""
     if models.storage_t == 'db':
