@@ -1,31 +1,48 @@
-#!/usr/bin/env bash
-#configure servers
+#!/bin/bash
 
-if [ ! -x /usr/sbin/nginx ]; then
-	sudo apt-get update
-	sudo apt-get install nginx
-fi
+# Update and install Nginx if it is not already installed
+sudo apt-get update
+sudo apt-get -y install nginx
 
-sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
+# Create the required directories
+sudo mkdir -p /data/web_static/releases/test
+sudo mkdir -p /data/web_static/shared
 
-touch /data/web_static/releases/test/index.html
+# Create a fake HTML file
 echo "<html>
   <head>
   </head>
   <body>
-    <h1>Testing Nginx configuration <h1>
+    Holberton School
   </body>
-</html>" > /data/web_static/releases/test/index.html
+</html>" | sudo tee /data/web_static/releases/test/index.html
 
-if [ -L /data/web_static/current ]; then
-	rm /data/web_static/current
-fi
-sudo ln -s /data/web_static/releases/test/ /data/web_static/current
+# Create a symbolic link, remove if it exists
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-sudo chown -R /data/ ubuntu:ubuntu
-sudo chmod -R 755 /data/
+# Give ownership of the /data/ folder to the ubuntu user AND group
+sudo chown -R ubuntu:ubuntu /data/
 
-sudo sed -i '48 i \\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n'
+# Update the Nginx configuration to serve the content
+# First, let's prepare the configuration snippet to include in the Nginx config
+sudo tee /etc/nginx/sites-available/hbnb_static <<EOF
+server {
+    listen 80;
+    server_name eslamalx.tech;
 
-sudo service nginx restart
+    location /hbnb_static {
+        alias /data/web_static/current/;
+        index index.html index.htm;
+    }
+}
+EOF
+
+# Enable the configuration by linking to the sites-enabled directory
+sudo ln -sf /etc/nginx/sites-available/hbnb_static /etc/nginx/sites-enabled/
+
+# Test Nginx configuration for syntax errors
+sudo nginx -t
+
+# Restart Nginx to apply the changes
+sudo systemctl restart nginx
+
