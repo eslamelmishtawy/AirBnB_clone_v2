@@ -45,5 +45,4 @@ sudo ln -sf /etc/nginx/sites-available/hbnb_static /etc/nginx/sites-enabled/
 sudo nginx -t
 
 # Restart Nginx to apply the changes
-sudo systemctl restart nginx
-
+sudo service nginx restart
