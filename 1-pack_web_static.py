@@ -3,6 +3,7 @@
 from fabric.api import local
 from datetime import datetime
 
+
 def do_pack():
     """Generates a .tgz archive from the contents of the web_static folder."""
     # Create the directory versions if it does not exist
@@ -13,8 +14,6 @@ def do_pack():
     archive_path = "versions/web_static_{}.tgz".format(now)
     # Create the archive using the local command
     result = local("tar -cvzf {} web_static".format(archive_path))
-    
     if result.failed:
         return None
     return archive_path
-
