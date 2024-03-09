@@ -26,20 +26,7 @@ sudo chown -R ubuntu:ubuntu /data/
 
 # Update the Nginx configuration to serve the content
 # First, let's prepare the configuration snippet to include in the Nginx config
-sudo tee /etc/nginx/sites-available/hbnb_static <<EOF
-server {
-    listen 80;
-    server_name eslamalx.tech;
-
-    location /hbnb_static {
-        alias /data/web_static/current/;
-        index index.html index.htm;
-    }
-}
-EOF
-
-# Enable the configuration by linking to the sites-enabled directory
-sudo ln -sf /etc/nginx/sites-available/hbnb_static /etc/nginx/sites-enabled/
+sudo sed -i '/^}/i \    location /hbnb_static {\n\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
 
 # Test Nginx configuration for syntax errors
 sudo nginx -t
